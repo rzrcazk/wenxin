@@ -145,7 +145,7 @@ Page({
         this.tossAudio.obeyMuteSwitch = false; // Play even in silent mode
         this.tossAudio.src = '/audio/shake.mp3';
         this.tossAudio.onError((res) => {
-            console.error('Audio play failed:', res);
+            // Audio error
         });
     },
 

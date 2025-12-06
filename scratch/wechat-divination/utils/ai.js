@@ -8,8 +8,6 @@ const MODELS = {
 };
 
 const callAI = (promptText, model) => {
-    console.log('Preparing to call AI API (Normal Mode)...');
-    console.log('Model:', model);
     return new Promise((resolve, reject) => {
         const app = getApp();
         const imageBase64 = app.globalData.currentImage;
@@ -24,7 +22,6 @@ const callAI = (promptText, model) => {
                     { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${imageBase64}` } } 
                 ]
             }];
-            console.log('Attaching image to request');
         } else {
             // Text Only Request
             messages = [{
@@ -33,7 +30,6 @@ const callAI = (promptText, model) => {
             }];
         }
 
-        console.log('Invoking wx.request...');
         wx.request({
             url: API_URL,
             method: 'POST',
@@ -47,20 +43,16 @@ const callAI = (promptText, model) => {
                 temperature: 0.7
             },
             success: (res) => {
-                console.log('API Success:', res);
                 if (res.statusCode === 200 && res.data.choices && res.data.choices.length > 0) {
                     resolve(res.data.choices[0].message.content);
                 } else {
-                    console.error('API Logic Error:', res);
-                    reject(new Error('AI API request failed: ' + JSON.stringify(res.data)));
+                    reject(new Error('AI API request failed'));
                 }
             },
             fail: (err) => {
-                console.error('API Network/System Error:', err);
                 reject(err);
             },
             complete: () => {
-                console.log('wx.request completed (success or fail)');
             }
         });
     });
@@ -126,15 +118,12 @@ const validateQuestion = (question) => {
             return { valid: false, message: '我还在学习怎么回答这个问题，换个决策类的问题考考我吧！' };
         }
     }).catch(err => {
-        console.error('Validation failed:', err);
         // 网络错误兜底：允许
         return { valid: true, type: 'DIVINATION', complexity: 'COMPLEX', message: 'OK' };
     });
 };
 
 const generateGeneralAnswer = (question) => {
-    console.log('Generating NORMAL general answer for:', question);
-    
     const app = getApp();
     const hasImage = !!app.globalData.currentImage;
     
@@ -162,8 +151,6 @@ const generateSummary = (question, hexagram, complexity = 'COMPLEX') => {
     if (complexity === 'DEEP_THINKING') selectedModel = MODELS.THINKING;
     else if (complexity === 'SEARCH') selectedModel = MODELS.SEARCH;
     
-    console.log(`Generating NORMAL summary.`);
-
     const app = getApp();
     const hasImage = !!app.globalData.currentImage;
 
@@ -186,10 +173,8 @@ const generateSummary = (question, hexagram, complexity = 'COMPLEX') => {
     - 200字左右。`;
 
     return callAI(prompt, selectedModel).catch(err => {
-        console.warn(`${selectedModel} failed, switching to fallback...`, err);
         const fallbackModel = (selectedModel === MODELS.THINKING) ? MODELS.NORMAL : MODELS.THINKING;
         return callAI(prompt, fallbackModel).catch(retryErr => {
-            console.error('All models failed:', retryErr);
             return '云端连接不稳定，请检查网络设置或稍后再试。';
         });
     });
@@ -198,7 +183,6 @@ const generateSummary = (question, hexagram, complexity = 'COMPLEX') => {
 let cachedSummaryPromise = null;
 
 const preloadSummary = (question, hexagram, complexity = 'COMPLEX', type = 'DIVINATION') => {
-    console.log('Preloading NORMAL content...', { question, type });
     if (type === 'KNOWLEDGE') {
         cachedSummaryPromise = generateGeneralAnswer(question);
     } else {

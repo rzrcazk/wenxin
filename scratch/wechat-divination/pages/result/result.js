@@ -96,13 +96,11 @@ Page({
             this.setData({ audioStatus: 'ready' });
         });
         this.innerAudioContext.onError((res) => {
-            console.error('Audio Error:', res);
             this.setData({ audioStatus: 'ready' });
         });
     },
 
     prefetchAudio(text) {
-        console.log("Audio prefetch requested for:", text.substring(0, 20) + "...");
         this.setData({ audioStatus: 'loading' });
 
         wx.request({
@@ -130,22 +128,18 @@ Page({
                         data: res.data,
                         encoding: 'binary',
                         success: () => {
-                            console.log('Audio saved to:', tempFilePath);
                             this.audioPath = tempFilePath;
                             this.setData({ audioStatus: 'ready' });
                         },
                         fail: (err) => {
-                            console.error('File write failed:', err);
                             this.setData({ audioStatus: 'ready' });
                         }
                     });
                 } else {
-                    console.error('TTS API Error:', res);
                     this.setData({ audioStatus: 'ready' });
                 }
             },
             fail: (err) => {
-                console.error('TTS Request Failed:', err);
                 this.setData({ audioStatus: 'ready' });
             }
         });
@@ -208,8 +202,8 @@ Page({
             const fs = wx.getFileSystemManager();
             fs.unlink({
                 filePath: this.audioPath,
-                success: () => console.log('Temp audio file removed'),
-                fail: (err) => console.error('Failed to remove temp file', err)
+                success: () => {},
+                fail: (err) => {}
             });
         }
     },

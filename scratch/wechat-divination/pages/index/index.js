@@ -68,10 +68,8 @@ Page({
                     encoding: 'base64',
                     success: (data) => {
                         app.globalData.currentImage = data.data;
-                        console.log('Image encoded to base64');
                     },
                     fail: (err) => {
-                        console.error('Failed to read image', err);
                         wx.showToast({ title: '图片处理失败', icon: 'none' });
                     }
                 });
@@ -163,7 +161,6 @@ Page({
 
         }).catch(err => {
             wx.hideLoading();
-            console.error(err);
             wx.showModal({
                 title: '提示',
                 content: '网络连接不畅，是否继续尝试？',
