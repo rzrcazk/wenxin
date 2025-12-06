@@ -92,7 +92,7 @@ Page({
         }
 
         wx.showLoading({
-            title: '正在感应...',
+            title: '正在准备...',
             mask: true
         });
 
@@ -114,10 +114,10 @@ Page({
                     title: '提示',
                     content: '这个问题似乎属于科普/通用知识范畴，您想要？',
                     cancelText: '普通回答', // Left button
-                    confirmText: '强行起卦', // Right button
+                    confirmText: '深度分析', // Right button
                     success: (res) => {
                         if (res.confirm) {
-                            // User chose "Force Divination"
+                            // User chose "Force Divination" -> Deep Analysis
                             wx.navigateTo({
                                 url: `../divination/divination?question=${encodeURIComponent(question)}&complexity=COMPLEX`
                             });
@@ -145,7 +145,7 @@ Page({
             console.error(err);
             wx.showModal({
                 title: '提示',
-                content: '网络感应不畅，是否强行起卦？',
+                content: '网络连接不畅，是否继续尝试？',
                 success: (res) => {
                     if (res.confirm) {
                         // Fallback to COMPLEX if validation fails
@@ -160,14 +160,14 @@ Page({
 
     onShareAppMessage() {
         return {
-            title: '诚心求卦，指点迷津',
+            title: '专治选择困难症，快来试试',
             path: '/pages/index/index'
         };
     },
 
     onShareTimeline() {
         return {
-            title: '诚心求卦',
+            title: '专治选择困难症',
             query: 'from=timeline'
         };
     }

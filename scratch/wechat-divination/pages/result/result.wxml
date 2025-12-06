@@ -67,7 +67,7 @@
 
                 <!-- Explanation of the Rule -->
                 <view class="rule-explanation">
-                    <view class="rule-title">断卦法则：</view>
+                    <view class="rule-title">原文释义：</view>
                     <view class="rule-body">{{hexagram.explanation}}</view>
                 </view>
             </view>
@@ -93,7 +93,7 @@
         <!-- Shared by both modes, just title change -->
         <view class="ai-summary-container">
             <view class="summary-header">
-                <view class="summary-title">{{isKnowledge ? '智能解答' : '大师批注'}}</view>
+                <view class="summary-title">{{isKnowledge ? '智能解答' : '多维解读'}}</view>
                 <view class="audio-control" bindtap="toggleAudio" wx:if="{{!isThinking && audioStatus !== 'disabled'}}">
                     <view class="audio-icon {{audioStatus}}"></view>
                     <text class="audio-text">{{audioStatus === 'loading' ? '准备中' : (audioStatus === 'playing' ? '静默' : '聆听解析')}}</text>

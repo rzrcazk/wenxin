@@ -2,18 +2,18 @@
   <!-- Background Decor: Ink Mountains -->
   <view class="bg-landscape"></view>
 
-  <view class="title">问心</view>
+  <view class="title">遇事不决？</view>
   
   <view class="instructions">
-    <view class="instruction-title">问心守则：</view>
-    <view class="instruction-item">1. 心诚则明。凡事只问一次，心中无欺，方得真解。</view>
-    <view class="instruction-item">2. 境净心清。请<text class="highlight">自备三枚硬币</text>，选清净之地。硬币由手出，<text class="highlight">不可落地</text>，落地则气散无效。</view>
-    <view class="instruction-item">3. 顺势而为。若硬币<text class="highlight">立起不倒</text>，意指当下混沌难明，请务必停止，静候时机。</view>
-    <view class="instruction-item">4. 探寻本心。默念所惑，三币六掷。外求诸相，内求诸心。</view>
+    <view class="instruction-title">决策指南：</view>
+    <view class="instruction-item">1. <text class="highlight">写下纠结</text>。把困扰你的选择题告诉硬币，或者拍张照。</view>
+    <view class="instruction-item">2. <text class="highlight">寻找灵感</text>。抛掷硬币，让随机性帮你打破思维定势。</view>
+    <view class="instruction-item">3. <text class="highlight">仅供参考</text>。结果源于随机概率，最终决定权在于你自己。</view>
+    <view class="instruction-item">4. <text class="highlight">保持娱乐</text>。别太严肃，生活偶尔需要一点意外惊喜。</view>
   </view>
 
   <view class="input-section">
-    <textarea class="question-input" placeholder="在此写下您想探寻的问题..." bindinput="onInputQuestion" value="{{question}}" />
+    <textarea class="question-input" placeholder="例如：今晚吃火锅还是减脂餐？要不要给前任点赞？..." bindinput="onInputQuestion" value="{{question}}" />
     
     <!-- Image Upload Control -->
     <view class="image-control-area">
@@ -24,16 +24,16 @@
       </view>
       <view wx:else class="upload-btn" bindtap="chooseImage">
           <text class="camera-icon">📷</text>
-          <text>添加图片</text>
+          <text>拍个照</text>
       </view>
 
       <!-- Right: Direct Ask Button -->
       <view class="direct-ask-btn" bindtap="directAsk">
-          <text class="magic-icon">✨</text>
-          <text>直接解惑</text>
+          <text class="magic-icon">💡</text>
+          <text>智能分析</text>
       </view>
     </view>
   </view>
 
-  <button class="start-btn" bindtap="startDivination">开始问心</button>
+  <button class="start-btn" bindtap="startDivination">抛硬币决策</button>
 </view>

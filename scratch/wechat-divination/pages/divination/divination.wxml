@@ -1,5 +1,5 @@
 <view class="container">
-  <view class="header">{{tossCount >= 6 ? '叩问完成' : '第 ' + (tossCount + 1) + ' 次叩问'}}</view>
+  <view class="header">{{tossCount >= 6 ? '步骤完成' : '第 ' + (tossCount + 1) + ' 次步骤'}}</view>
   
   <view class="result-area">
     <view class="hexagram-visual">
@@ -37,7 +37,7 @@
   <view class="input-area" wx:if="{{tossCount < 6}}">
     <view class="virtual-toss-section">
       <button class="virtual-btn" bindtap="virtualToss" disabled="{{isTossing}}">
-        {{isTossing ? '探寻中...' : '投币问心'}}
+        {{isTossing ? '硬币旋转中...' : '抛掷硬币'}}
       </button>
       <view class="toss-animation-container" wx:if="{{isTossing}}">
          <image src="/images/zhengmian.png" class="toss-coin coin-1 {{animationClass}}"></image>
