@@ -1,0 +1,39 @@
+<view class="container">
+  <!-- Background Decor: Ink Mountains -->
+  <view class="bg-landscape"></view>
+
+  <view class="title">问心</view>
+  
+  <view class="instructions">
+    <view class="instruction-title">问心守则：</view>
+    <view class="instruction-item">1. 心诚则明。凡事只问一次，心中无欺，方得真解。</view>
+    <view class="instruction-item">2. 境净心清。请<text class="highlight">自备三枚硬币</text>，选清净之地。硬币由手出，<text class="highlight">不可落地</text>，落地则气散无效。</view>
+    <view class="instruction-item">3. 顺势而为。若硬币<text class="highlight">立起不倒</text>，意指当下混沌难明，请务必停止，静候时机。</view>
+    <view class="instruction-item">4. 探寻本心。默念所惑，三币六掷。外求诸相，内求诸心。</view>
+  </view>
+
+  <view class="input-section">
+    <textarea class="question-input" placeholder="在此写下您想探寻的问题..." bindinput="onInputQuestion" value="{{question}}" />
+    
+    <!-- Image Upload Control -->
+    <view class="image-control-area">
+      <!-- Left: Image Upload -->
+      <view wx:if="{{tempImagePath}}" class="image-preview-box">
+          <image src="{{tempImagePath}}" mode="aspectFill" class="image-preview" bindtap="previewImage"></image>
+          <view class="remove-btn" bindtap="removeImage">×</view>
+      </view>
+      <view wx:else class="upload-btn" bindtap="chooseImage">
+          <text class="camera-icon">📷</text>
+          <text>添加图片</text>
+      </view>
+
+      <!-- Right: Direct Ask Button -->
+      <view class="direct-ask-btn" bindtap="directAsk">
+          <text class="magic-icon">✨</text>
+          <text>直接解惑</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="start-btn" bindtap="startDivination">开始问心</button>
+</view>

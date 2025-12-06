@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "Implementation plan for WeChat Divination Mini Program. Includes project structure, core logic for coin toss and hexagram calculation, and UI pages.",
+  "updatedAt": "2025-11-30T05:44:13.175587Z"
+}

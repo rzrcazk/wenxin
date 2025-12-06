@@ -1,0 +1,466 @@
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #3e2723; /* Dark Wood Background */
+  height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%235d4037' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Ancient Book Styles */
+.ancient-book {
+  width: 90%;
+  height: 82vh;
+  background-color: #f4e4c1;
+  background-image: linear-gradient(to right, #e0d0b0 0%, #f4e4c1 5%, #f4e4c1 95%, #e0d0b0 100%);
+  border: none; /* Removed simple border */
+  border-left: 12rpx solid #5d4037; /* Binding */
+  border-radius: 4rpx 10rpx 10rpx 4rpx;
+  box-shadow: 
+      inset 20rpx 0 30rpx rgba(0,0,0,0.1), /* Spine shadow */
+      10rpx 20rpx 30rpx rgba(0,0,0,0.5); /* Drop shadow */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+}
+
+/* Book Cover */
+.book-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border: 2rpx solid #d4af37;
+  margin: 10rpx;
+  box-sizing: border-box;
+  background: radial-gradient(circle, #8b5a2b 0%, #5d4037 100%);
+}
+
+.cover-title {
+  font-size: 100rpx;
+  font-weight: bold;
+  color: #f4e4c1;
+  writing-mode: vertical-rl;
+  border: 6rpx double #f4e4c1;
+  padding: 40rpx 20rpx;
+  margin-bottom: 40rpx;
+  font-family: "Kaiti SC", serif;
+  text-shadow: 0 4rpx 8rpx rgba(0,0,0,0.4);
+  letter-spacing: 10rpx;
+}
+
+.trigram-combine {
+  display: flex;
+  align-items: center;
+  margin: 40rpx 0;
+  background: rgba(255,255,255,0.1);
+  padding: 20rpx;
+  border-radius: 10rpx;
+}
+
+.trigram-name {
+  font-size: 28rpx;
+  color: #f4e4c1;
+  opacity: 0.8;
+}
+
+.trigram-symbol {
+  font-size: 70rpx;
+  color: #f4e4c1;
+}
+
+.plus, .arrow-down {
+  color: #d4af37;
+  font-size: 40rpx;
+  margin: 0 20rpx;
+}
+
+.hexagram-found {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #f1c40f;
+  margin-bottom: 50rpx;
+  display: flex;
+  align-items: center;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.5);
+}
+
+.open-book-btn {
+  background-color: #d4af37;
+  color: #3e2723;
+  border-radius: 50rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  padding: 20rpx 60rpx;
+  box-shadow: 0 6rpx 12rpx rgba(0,0,0,0.3);
+  transition: transform 0.1s;
+}
+
+.open-book-btn:active {
+  transform: scale(0.95);
+}
+
+/* Book Page Internal */
+.book-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ensure content stays within the book */
+}
+
+.page-header {
+  border-bottom: 4rpx double #8b5a2b;
+  padding-bottom: 20rpx;
+  margin-bottom: 20rpx; /* Reduced margin */
+  text-align: center;
+  width: 100%;
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.page-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #3e2723;
+  font-family: "Kaiti SC", serif;
+}
+
+/* Mystical Divider (Clouds/Incense) */
+.mystical-divider {
+  width: 100%;
+  height: 60rpx; /* Height of the decorative gap */
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-top: -20rpx; /* Pull up slightly to overlap/blend */
+  margin-bottom: -10rpx;
+  z-index: 1; /* Above borders */
+}
+
+.cloud-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%; /* Wide for scrolling */
+  height: 100%;
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.6;
+}
+
+/* Cloud Layer 1 (Slow, Background) */
+.c1 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath fill='%238b5a2b' fill-opacity='0.2' d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z' opacity='.25'/%3E%3C/svg%3E");
+  animation: cloudFloat 20s linear infinite;
+}
+
+/* Cloud Layer 2 (Faster, Foreground) */
+.c2 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath fill='%23d4af37' fill-opacity='0.3' d='M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05c99.41,75.27,251.82-13.46,292.25-19.14,80.55-11.32,132.7,36.52,211.5,64.54,73.84,26.24,149.33,20.39,218.56-9.46,71.12-30.66,129.59-77.57,203.8-88,39.57-5.55,79.84,1.68,118.2,11.94V0Z' opacity='.25'/%3E%3C/svg%3E");
+  animation: cloudFloat 12s linear infinite reverse;
+  opacity: 0.5;
+}
+
+@keyframes cloudFloat {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.info-content {
+  padding: 10rpx 20rpx;
+}
+
+/* AI Summary Container (Bottom - Golden Slip Style) */
+.ai-summary-container {
+  flex: 1; /* Take all remaining vertical space */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+  border: 2rpx solid #ffd54f;
+  border-radius: 12rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(212, 175, 55, 0.15); /* Shadow pointing up */
+  padding: 24rpx;
+  box-sizing: border-box;
+  overflow: hidden; /* Contain scrollview */
+  position: relative;
+}
+
+/* Golden Slip Decoration */
+.ai-summary-container::before {
+  content: '';
+  position: absolute;
+  top: 8rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 4rpx;
+  background: rgba(139, 90, 43, 0.1);
+  border-radius: 4rpx;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx dashed #ffb74d;
+  flex-shrink: 0; /* Keep header fixed */
+}
+
+.summary-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #e65100;
+}
+
+.summary-scroll {
+  flex: 1; /* Fill the container */
+  height: 0; /* Flex scroll trick */
+  width: 100%;
+}
+
+.summary-content {
+  font-size: 32rpx;
+  color: #4e342e;
+  line-height: 1.7;
+  display: block;
+  padding-bottom: 20rpx;
+  text-align: justify;
+}
+
+.text-block {
+  padding: 24rpx;
+  border-left: 6rpx solid #a1887f;
+  margin-bottom: 30rpx;
+  background-color: rgba(255,255,255,0.4);
+  border-radius: 0 10rpx 10rpx 0;
+}
+
+.highlight-text {
+  border-left-color: #c0392b;
+  background-color: rgba(192, 57, 43, 0.05);
+}
+
+.text-label {
+  font-size: 28rpx;
+  color: #795548;
+  margin-bottom: 10rpx;
+  font-weight: bold;
+}
+
+.text-body {
+  font-size: 36rpx;
+  color: #2c3e50;
+  line-height: 1.6;
+  font-family: "Songti SC", serif;
+}
+
+.rule-explanation {
+  background: #efebe9;
+  padding: 20rpx;
+  border-radius: 8rpx;
+  margin-bottom: 30rpx;
+}
+
+.visual-reference {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin: 30rpx 0;
+  padding: 20rpx;
+  border: 1rpx solid #d7ccc8;
+  border-radius: 8rpx;
+}
+
+/* Audio Control */
+.audio-control {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #ffca28 0%, #ff6f00 100%); /* Amber to Orange gradient */
+    padding: 12rpx 24rpx;
+    border-radius: 40rpx;
+    border: 1rpx solid #ff8f00;
+    box-shadow: 0 4rpx 10rpx rgba(255, 111, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.audio-control:active {
+    transform: scale(0.95);
+    box-shadow: 0 2rpx 5rpx rgba(255, 111, 0, 0.3);
+}
+
+.audio-icon {
+    width: 36rpx;
+    height: 36rpx;
+    margin-right: 12rpx;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    /* Default Speaker Icon (White) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z'/%3E%3C/svg%3E");
+}
+
+/* Loading State - Spinner */
+.audio-icon.loading {
+    background-image: none;
+    border: 4rpx solid rgba(255, 255, 255, 0.3);
+    border-top: 4rpx solid #fff;
+    border-radius: 50%;
+    width: 30rpx;
+    height: 30rpx;
+    animation: spin 1s linear infinite;
+}
+
+/* Playing State - Mute Icon (Click to Silence) */
+.audio-icon.playing {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff'%3E%3Cpath d='M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z'/%3E%3C/svg%3E");
+    animation: pulse-audio 1.5s infinite;
+}
+
+@keyframes pulse-audio {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.audio-text {
+    font-size: 26rpx;
+    color: #fff; /* White text for contrast */
+    font-weight: bold;
+    letter-spacing: 1rpx;
+    text-shadow: 0 1rpx 2rpx rgba(0,0,0,0.2);
+}
+
+.home-btn {
+    margin-top: 20rpx;
+    background: #5d4037;
+    color: #fff;
+    border-radius: 40rpx;
+    font-size: 30rpx;
+    padding: 15rpx 50rpx;
+    box-shadow: 0 5rpx 15rpx rgba(0,0,0,0.3);
+}
+
+/* Flip Animation Container */
+.book-flipping {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10; /* Above cover */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(62, 39, 35, 0.8); /* Dim background */
+  perspective: 1500px; /* 3D Depth */
+}
+
+.flipping-text {
+  color: #f4e4c1;
+  font-size: 32rpx;
+  margin-top: 400rpx; /* Push text down below the flipping pages */
+  letter-spacing: 4rpx;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.flipping-page {
+  position: absolute;
+  top: 20%; /* Position within the book area */
+  left: 50%;
+  margin-left: -200rpx; /* Half width to center */
+  width: 400rpx;
+  height: 500rpx;
+  background-color: #f4e4c1;
+  background-image: linear-gradient(to right, #e0d0b0 0%, #f4e4c1 10%);
+  border: 2rpx solid #d4af37;
+  border-radius: 0 10rpx 10rpx 0;
+  transform-origin: left center; /* Flip from spine */
+  box-shadow: 5rpx 5rpx 15rpx rgba(0,0,0,0.2);
+  /* Animation Definition */
+  animation: flipBook 1.5s cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
+  opacity: 0; /* Start hidden */
+}
+
+.page-1 {
+  animation-delay: 0s;
+  z-index: 3;
+}
+
+.page-2 {
+  animation-delay: 0.5s;
+  z-index: 2;
+}
+
+.page-3 {
+  animation-delay: 1s;
+  z-index: 1;
+}
+
+@keyframes flipBook {
+  0% {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(-160deg);
+    opacity: 0;
+  }
+}
+
+/* AI Thinking State - Ink Dots */
+.thinking-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+  width: 100%;
+}
+
+.ink-dot {
+  width: 24rpx;
+  height: 24rpx;
+  background-color: #5d4037;
+  border-radius: 50%;
+  margin: 10rpx;
+  display: inline-block;
+  opacity: 0;
+  box-shadow: 0 0 10rpx rgba(93, 64, 55, 0.5);
+}
+
+.dot1 { animation: inkSpread 1.5s infinite 0s; }
+.dot2 { animation: inkSpread 1.5s infinite 0.3s; }
+.dot3 { animation: inkSpread 1.5s infinite 0.6s; }
+
+@keyframes inkSpread {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.5); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.thinking-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #8d6e63;
+  font-style: italic;
+}

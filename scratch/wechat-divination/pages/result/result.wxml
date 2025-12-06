@@ -1,0 +1,119 @@
+<view class="container">
+  <!-- Ancient Book Container -->
+  <view class="ancient-book">
+    
+    <!-- Step 1: Book Cover / Trigram Index -->
+    <view class="book-cover" wx:if="{{step === 0}}">
+        <!-- DIVINATION MODE -->
+        <block wx:if="{{!isKnowledge}}">
+            <view class="cover-title">周易</view>
+            <view class="trigram-combine">
+                <view class="trigram-part">
+                    <view class="trigram-name">上卦</view>
+                    <!-- Placeholder for Upper Trigram Visual -->
+                    <view class="trigram-symbol">☷</view> 
+                </view>
+                <view class="plus">+</view>
+                <view class="trigram-part">
+                    <view class="trigram-name">下卦</view>
+                    <!-- Placeholder for Lower Trigram Visual -->
+                    <view class="trigram-symbol">☰</view>
+                </view>
+            </view>
+            <view class="arrow-down">⬇</view>
+            <view class="hexagram-found">
+                <text class="hexagram-symbol">{{hexagram.symbol}}</text> {{hexagram.title}}
+            </view>
+        </block>
+
+        <!-- KNOWLEDGE MODE -->
+        <block wx:else>
+            <view class="cover-title" style="font-size: 60rpx; margin-bottom: 40rpx;">万卷书</view>
+            <view class="trigram-combine">
+                <view class="trigram-symbol" style="font-size: 120rpx;">💡</view>
+            </view>
+             <view class="hexagram-found" style="margin-top: 60rpx;">
+                <text class="hexagram-symbol">?</text> 答疑解惑
+            </view>
+        </block>
+
+        <button class="open-book-btn" bindtap="openBook">翻开书页</button>
+    </view>
+
+    <!-- Step 1.5: Flipping Animation -->
+    <view class="book-flipping" wx:if="{{step === 0.5}}">
+        <view class="flipping-page page-1"></view>
+        <view class="flipping-page page-2"></view>
+        <view class="flipping-page page-3"></view>
+        <view class="flipping-text">正在翻阅...</view>
+    </view>
+
+    <!-- Step 2 & 3: Book Page (Content) -->
+    <view class="book-page" wx:if="{{step >= 1}}">
+        <view class="page-header">
+            <view class="page-title" wx:if="{{!isKnowledge}}">{{hexagram.symbol}} {{hexagram.title}}</view>
+            <view class="page-title" wx:else>💡 智慧锦囊</view>
+        </view>
+        
+        <!-- Top Section: Hexagram Details (Scrollable independently) -->
+        <!-- Only show in DIVINATION mode -->
+        <scroll-view scroll-y="true" class="info-scroll" enable-flex="true" wx:if="{{!isKnowledge}}">
+            <view class="info-content">
+                <!-- Hexagram Judgment -->
+                <view class="text-block {{ (hexagram.type === 'hexagram' && !hexagram.isTransformed) ? 'highlight-text' : '' }}">
+                    <view class="text-label">【卦辞】</view>
+                    <view class="text-body">{{hexagram.text}}</view> 
+                </view>
+
+                <!-- Explanation of the Rule -->
+                <view class="rule-explanation">
+                    <view class="rule-title">断卦法则：</view>
+                    <view class="rule-body">{{hexagram.explanation}}</view>
+                </view>
+            </view>
+        </scroll-view>
+
+        <!-- KNOWLEDGE MODE: Show Question -->
+         <scroll-view scroll-y="true" class="info-scroll" enable-flex="true" wx:if="{{isKnowledge}}" style="height: 20%;">
+             <view class="info-content">
+                <view class="text-block highlight-text">
+                    <view class="text-label">【提问】</view>
+                    <view class="text-body">{{question}}</view> 
+                </view>
+             </view>
+         </scroll-view>
+
+        <!-- Decorative Divider: Mystical Clouds/Incense -->
+        <view class="mystical-divider">
+            <view class="cloud-layer c1"></view>
+            <view class="cloud-layer c2"></view>
+        </view>
+
+        <!-- Bottom Section: AI Summary (Expanded and independently scrollable) -->
+        <!-- Shared by both modes, just title change -->
+        <view class="ai-summary-container">
+            <view class="summary-header">
+                <view class="summary-title">{{isKnowledge ? '智能解答' : '大师批注'}}</view>
+                <view class="audio-control" bindtap="toggleAudio" wx:if="{{!isThinking && audioStatus !== 'disabled'}}">
+                    <view class="audio-icon {{audioStatus}}"></view>
+                    <text class="audio-text">{{audioStatus === 'loading' ? '准备中' : (audioStatus === 'playing' ? '静默' : '聆听解析')}}</text>
+                </view>
+            </view>
+            <scroll-view scroll-y="true" class="summary-scroll" enable-flex="true">
+                <block wx:if="{{isThinking}}">
+                    <view class="thinking-container">
+                        <view class="ink-dot dot1"></view>
+                        <view class="ink-dot dot2"></view>
+                        <view class="ink-dot dot3"></view>
+                        <text class="thinking-text">正在沉思...</text>
+                    </view>
+                </block>
+                <text wx:else class="summary-content">{{summary}}</text>
+            </scroll-view>
+        </view>
+    </view>
+
+  </view>
+
+  <button class="home-btn" bindtap="goHome">返回首页</button>
+</view>

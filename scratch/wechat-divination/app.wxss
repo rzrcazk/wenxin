@@ -1,0 +1,24 @@
+/**app.wxss**/
+page {
+  /* Color Palette - Mystical Zen Theme */
+  --primary-ink: #2c3e50;       /* Deep Ink Blue/Grey */
+  --secondary-ink: #34495e;     /* Lighter Ink */
+  --accent-gold: #d4af37;       /* Muted Gold */
+  --accent-red: #c0392b;        /* Cinnabar Red */
+  --paper-bg: #f4f1ea;          /* Rice Paper Beige */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  
+  background-color: var(--paper-bg);
+  font-family: "Songti SC", "SimSun", "STSong", "serif", -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Roboto, 'PingFang SC', 'Microsoft Yahei', sans-serif;
+  color: var(--primary-ink);
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
