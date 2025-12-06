@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/divination/divination",
-    "pages/result/result"
+    "pages/result/result",
+    "pages/divination_god/divination_god",
+    "pages/result_god/result_god"
   ],
   "window": {
     "backgroundTextStyle": "light",

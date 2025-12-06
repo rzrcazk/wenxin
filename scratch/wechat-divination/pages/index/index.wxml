@@ -2,7 +2,7 @@
   <!-- Background Decor: Ink Mountains -->
   <view class="bg-landscape"></view>
 
-  <view class="title">遇事不决？</view>
+  <view class="title" bindlongpress="onTitleLongPress" style="color: {{titleColor}}">{{titleText}}</view>
   
   <view class="instructions">
     <view class="instruction-title">决策指南：</view>

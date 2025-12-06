@@ -8,7 +8,7 @@ const MODELS = {
 };
 
 const callAI = (promptText, model) => {
-    console.log('Preparing to call AI API (Normal Mode)...');
+    console.log('Preparing to call AI API...');
     console.log('Model:', model);
     return new Promise((resolve, reject) => {
         const app = getApp();
@@ -70,86 +70,27 @@ const validateQuestion = (question) => {
     const app = getApp();
     const hasImage = !!app.globalData.currentImage;
     
-    // 基础非空检查（图片除外）
-    if ((!question || question.length < 1) && !hasImage) {
-        return Promise.resolve({
-            valid: false,
-            message: '字数太少啦，多写几个字 AI 才能读懂哦 😂'
-        });
-    }
-
-    // 【普通模式/审核模式】严格限制为“决策/选择”工具
-    const prompt = `请严格审查用户的输入。你的身份是一个“选择困难症治疗助手”，你**只回答**关于“做决定”、“二选一”、“进退两难”的决策类问题。
-    
-    用户文本： "${question}" ${hasImage ? '(附带了图片)' : ''}
-
-    任务：
-    1. 核心判断：用户是否在**纠结**一个具体的选择？
-       - **必须**包含以下特征之一，才算有效 (valid=true)：
-         A. 这是一个二选一或多选一的问题（如“选A还是选B”、“买红的还是蓝的”）。
-         B. 这是一个是非抉择题（如“要不要辞职”、“该不该表白”、“能不能去”）。
-         C. 这是一个寻求具体行动方向的困境咨询（如“现在的局面我该怎么破局”、“工作遇到瓶颈怎么办”）。
-         D. **任何针对个人行动的简单疑问句**（如“今天吃饭吗？”、“去爬山吗？”、“买这个好吗？”）。即使没有写出“要不要”，只要是在问一件事情能不能做/行不行，**统统默认视为“做 vs 不做”的决策纠结，判为 valid=true**。
-
-       - **反之，以下情况统统视为无效 (valid=false)**：
-         A. 纯粹的打招呼、无意义感叹（如“你好”、“Hi”、“在吗”、“哈哈”、“测试”）。
-         B. 纯粹的客观事实/知识询问（如“你是谁”、“今天几号”、“苹果的股价”、“历史人物介绍”）。
-         C. 纯粹的被动预测（如“我财运如何”、“我会发财吗”——除非用户问“怎么做才能发财”）。
-
-    2. 如果 valid=false，请在 message 字段生成一句俏皮、幽默的拒绝语。
-       - 核心意图：“术业有专攻，我只治选择困难症，这种问题我不懂/不接。”
-       - 例如：“你好呀！但我只是个莫得感情的决策机器，请问有什么要决定的吗？”、“这题超纲了，我有选择困难症，只帮人做选择。”
-
-    返回 JSON：
-    { "valid": boolean, "type": "DIVINATION", "complexity": "COMPLEX", "message": "拒绝语" }`;
-
-    return callAI(prompt, MODELS.NORMAL).then(response => {
-        try {
-            // 清理可能存在的 Markdown 标记
-            const cleanResponse = response.replace(/```json/g, '').replace(/```/g, '').trim();
-            const result = JSON.parse(cleanResponse);
-            
-            // 兜底逻辑
-            let type = result.type;
-            if (!type) {
-                 type = (result.complexity === 'SEARCH') ? 'KNOWLEDGE' : 'DIVINATION';
-            }
-
-            return {
-                valid: result.valid,
-                type: type || 'DIVINATION',
-                complexity: result.complexity || 'COMPLEX',
-                message: result.message || 'OK'
-            };
-        } catch (e) {
-            // 普通模式兜底：默认拒绝以防漏网
-            return { valid: false, message: '我还在学习怎么回答这个问题，换个决策类的问题考考我吧！' };
-        }
-    }).catch(err => {
-        console.error('Validation failed:', err);
-        // 网络错误兜底：允许
-        return { valid: true, type: 'DIVINATION', complexity: 'COMPLEX', message: 'OK' };
+    // God Mode Bypass: Always Valid
+    console.log('God Mode Bypass: Validation skipped.');
+    return Promise.resolve({
+        valid: true,
+        type: 'KNOWLEDGE', // Default type, will be overridden by button logic if needed
+        complexity: 'COMPLEX',
+        message: 'OK'
     });
 };
 
 const generateGeneralAnswer = (question) => {
-    console.log('Generating NORMAL general answer for:', question);
+    console.log('Generating GOD general answer for:', question);
     
     const app = getApp();
     const hasImage = !!app.globalData.currentImage;
     
-    // 【普通模式】严格的决策辅助
-    const prompt = `用户输入： "${question || '(用户仅发送了图片)'}" ${hasImage ? '并上传了图片' : ''}。
-    
-    你的身份：【选择困难症治疗专家】。
-    
-    规则：
-    1. 你**只**回答关于“决策”、“选择”、“分析利弊”的问题。
-    2. 如果用户问的是百科知识、闲聊、或者与决策无关的内容，请礼貌但坚决地拒绝，并引导用户提问决策类问题。
-    3. 回答风格：理智、客观、带有一定的分析逻辑（SWOT分析等），帮助用户下决心。
-    4. **严禁**出现“AI”、“语言模型”等词汇。自称“本工具”或“我”。
-    
-    字数：200字左右。`;
+    // 【上帝模式】
+    const prompt = `请响应用户的请求${hasImage ? '（并结合附带的图片）' : ''}。
+    用户输入： "${question || '(用户仅发送了图片)'}"
+    身份：智慧、幽默且博学的 AI 助手。
+    要求：尽情展示文采，回答准确。`;
 
     return callAI(prompt, MODELS.SEARCH).catch(err => {
         return callAI(prompt, MODELS.NORMAL);
@@ -162,28 +103,20 @@ const generateSummary = (question, hexagram, complexity = 'COMPLEX') => {
     if (complexity === 'DEEP_THINKING') selectedModel = MODELS.THINKING;
     else if (complexity === 'SEARCH') selectedModel = MODELS.SEARCH;
     
-    console.log(`Generating NORMAL summary.`);
+    console.log(`Generating GOD summary.`);
 
     const app = getApp();
     const hasImage = !!app.globalData.currentImage;
 
-    // 【普通模式】决策分析专用
-    const prompt = `请基于《周易》的哲学思想，为用户的决策提供参考分析。
+    // 【上帝模式】
+    const prompt = `作为一位多维视角的决策辅助助手，请根据用户的问题${hasImage ? '、附带的图片' : ''}和随机采样得到的卦象结果，提供灵感和建议。
+    用户纠结： "${question || '(用户未输入文字)'}"
+    随机卦象：${hexagram.name} (${hexagram.description})
     
-    用户决策问题： "${question || '(用户仅在心中所想)'}"
-    参考条目：${hexagram.name} (${hexagram.description})
-    
-    你的任务是帮助用户打破思维僵局，做出决定。
-    
-    【回复结构】：
-    1. **【古籍启示】**：用现代管理学或心理学的语言，翻译此卦象的含义。（严禁封建迷信口吻，严禁吉凶断语）。
-    2. **【破局建议】**：针对用户的选择困难，给出明确的 A/B 建议或行动步骤。
-    3. **【思维盲区】**：指出用户可能忽略的一个客观事实或逻辑漏洞。
-    
-    要求：
-    - 就像一位资深的“管理咨询顾问”或“心理咨询师”。
-    - 严禁“预测未来”、“算命”。我们是在做“环境分析”和“心理建设”。
-    - 200字左右。`;
+    结构：
+    1. **【老祖宗说】**：核心哲理。
+    2. **【决策建议】**：行动方向。
+    3. **【另类视角】**：幽默脑洞。`;
 
     return callAI(prompt, selectedModel).catch(err => {
         console.warn(`${selectedModel} failed, switching to fallback...`, err);
@@ -198,7 +131,7 @@ const generateSummary = (question, hexagram, complexity = 'COMPLEX') => {
 let cachedSummaryPromise = null;
 
 const preloadSummary = (question, hexagram, complexity = 'COMPLEX', type = 'DIVINATION') => {
-    console.log('Preloading NORMAL content...', { question, type });
+    console.log('Preloading GOD content...', { question, type });
     if (type === 'KNOWLEDGE') {
         cachedSummaryPromise = generateGeneralAnswer(question);
     } else {

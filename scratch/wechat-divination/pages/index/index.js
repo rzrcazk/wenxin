@@ -1,10 +1,48 @@
 const ai = require('../../utils/ai.js');
+const aiGod = require('../../utils/ai_god.js');
 const app = getApp();
+
+const GOD_MODE_COLORS = [
+    '#d93a49', // 朱砂红
+    '#FFD700', // 帝王金
+    '#800080', // 紫气东来
+    '#00CED1', // 绿松石
+    '#FF4500', // 橘红
+    '#1E90FF'  // 宝蓝
+];
 
 Page({
     data: {
         question: '',
-        tempImagePath: ''
+        tempImagePath: '',
+        titleText: '遇事不决？',
+        titleColor: '' // Default (CSS defined)
+    },
+
+    onLoad() {
+        const isGodMode = wx.getStorageSync('GOD_MODE') || false;
+        this.setData({
+            titleText: isGodMode ? '遇事不决！' : '遇事不决？',
+            titleColor: isGodMode ? this.getRandomColor() : ''
+        });
+    },
+
+    getRandomColor() {
+        return GOD_MODE_COLORS[Math.floor(Math.random() * GOD_MODE_COLORS.length)];
+    },
+
+    onTitleLongPress() {
+        const currentMode = wx.getStorageSync('GOD_MODE') || false;
+        const newMode = !currentMode;
+        
+        wx.setStorageSync('GOD_MODE', newMode);
+        
+        this.setData({
+            titleText: newMode ? '遇事不决！' : '遇事不决？',
+            titleColor: newMode ? this.getRandomColor() : ''
+        });
+
+        wx.vibrateShort({ type: 'heavy' });
     },
 
     onInputQuestion(e) {
@@ -56,10 +94,19 @@ Page({
         app.globalData.currentImage = null;
     },
 
-    // Quick access to AI answer without divination ritual
-    directAsk() {
-        const question = this.data.question.trim();
+    // Unified request processor
+    processRequest(targetType) {
+        let question = this.data.question.trim();
         const hasImage = !!app.globalData.currentImage;
+        const isGodModeActive = wx.getStorageSync('GOD_MODE') || false;
+        let isGodTrigger = isGodModeActive;
+
+        // Check for 9527 prefix
+        if (question.startsWith('9527')) {
+            isGodTrigger = true;
+            question = question.substring(4).trim(); // Remove prefix
+            // Optionally update UI to reflect stripped question if needed, but for now just use it for logic
+        }
 
         if (!question && !hasImage) {
             wx.showToast({
@@ -69,77 +116,51 @@ Page({
             return;
         }
 
-        // Directly preload as KNOWLEDGE type
-        // Use 'SIMPLE' complexity for faster response if appropriate, or keep defaults
-        ai.preloadSummary(question, null, 'SIMPLE', 'KNOWLEDGE');
-        
-        // Navigate to Result page in "Knowledge Mode"
-        wx.navigateTo({
-            url: `../result/result?question=${encodeURIComponent(question)}&type=KNOWLEDGE`
-        });
-    },
-
-    startDivination() {
-        const question = this.data.question.trim();
-        const hasImage = !!app.globalData.currentImage;
-
-        if (!question && !hasImage) {
-            wx.showToast({
-                title: '请描述问题或上传图片',
-                icon: 'none'
-            });
-            return;
-        }
-
         wx.showLoading({
-            title: '正在准备...',
+            title: '正在分析...',
             mask: true
         });
 
-        ai.validateQuestion(question).then(result => {
+        const targetAI = isGodTrigger ? aiGod : ai;
+
+        targetAI.validateQuestion(question).then(result => {
             wx.hideLoading();
-            // result 现在是一个对象 { valid: boolean, message: string, complexity: string, type: string }
+
+            // 1. Intercept Invalid Requests (Gatekeeper)
             if (!result.valid) {
-                wx.showToast({
-                    title: result.message, // 显示AI生成的俏皮话
-                    icon: 'none',
-                    duration: 3000 // 增加显示时间，让用户看清
+                wx.showModal({
+                    title: '哎呀',
+                    content: result.message || '这个问题有点超纲，我只擅长帮人做决定哦。',
+                    showCancel: false,
+                    confirmText: '知道了'
                 });
                 return;
             }
 
-            // Check for KNOWLEDGE type (General questions)
-            if (result.type === 'KNOWLEDGE') {
-                wx.showModal({
-                    title: '提示',
-                    content: '这个问题似乎属于科普/通用知识范畴，您想要？',
-                    cancelText: '普通回答', // Left button
-                    confirmText: '深度分析', // Right button
-                    success: (res) => {
-                        if (res.confirm) {
-                            // User chose "Force Divination" -> Deep Analysis
-                            wx.navigateTo({
-                                url: `../divination/divination?question=${encodeURIComponent(question)}&complexity=COMPLEX`
-                            });
-                        } else if (res.cancel) {
-                            // User chose "General Answer"
-                            // Preload the general answer immediately
-                            ai.preloadSummary(question, null, 'SIMPLE', 'KNOWLEDGE');
-                            // Navigate to Result page in "Knowledge Mode"
-                            wx.navigateTo({
-                                url: `../result/result?question=${encodeURIComponent(question)}&type=KNOWLEDGE`
-                            });
-                        }
-                    }
-                });
-                return;
-            }
+            // 2. Route to correct flow based on User's Button Choice
             
-            // Standard Divination Flow
-            const complexity = result.complexity || 'COMPLEX';
-            wx.navigateTo({
-                url: `../divination/divination?question=${encodeURIComponent(question)}&complexity=${complexity}`
-            })
+            if (targetType === 'KNOWLEDGE') {
+                // "Smart Analysis" Flow -> Result Page
+                const resultPage = isGodTrigger ? '../result_god/result_god' : '../result/result';
+                
+                targetAI.preloadSummary(question, null, 'SIMPLE', 'KNOWLEDGE');
+                wx.navigateTo({
+                    url: `${resultPage}?question=${encodeURIComponent(question)}&type=KNOWLEDGE`
+                });
+            } else {
+                // "Coin Toss/Divination" Flow
+                const complexity = result.complexity || 'COMPLEX';
+                if (isGodTrigger) {
+                    wx.navigateTo({
+                        url: `../divination_god/divination_god?question=${encodeURIComponent(question)}&complexity=${complexity}`
+                    });
+                } else {
+                    wx.navigateTo({
+                        url: `../divination/divination?question=${encodeURIComponent(question)}&complexity=${complexity}`
+                    });
+                }
+            }
+
         }).catch(err => {
             wx.hideLoading();
             console.error(err);
@@ -148,14 +169,37 @@ Page({
                 content: '网络连接不畅，是否继续尝试？',
                 success: (res) => {
                     if (res.confirm) {
-                        // Fallback to COMPLEX if validation fails
-                        wx.navigateTo({
-                            url: `../divination/divination?question=${encodeURIComponent(question)}&complexity=COMPLEX`
-                        })
+                         // Fallback logic
+                        if (targetType === 'KNOWLEDGE') {
+                             const resultPage = isGodTrigger ? '../result_god/result_god' : '../result/result';
+                            wx.navigateTo({
+                                url: `${resultPage}?question=${encodeURIComponent(question)}&type=KNOWLEDGE`
+                            });
+                        } else {
+                            if (isGodTrigger) {
+                                wx.navigateTo({
+                                    url: `../divination_god/divination_god?question=${encodeURIComponent(question)}&complexity=COMPLEX`
+                                });
+                            } else {
+                                wx.navigateTo({
+                                    url: `../divination/divination?question=${encodeURIComponent(question)}&complexity=COMPLEX`
+                                });
+                            }
+                        }
                     }
                 }
             });
         });
+    },
+
+    // Quick access / Smart Analysis
+    directAsk() {
+        this.processRequest('KNOWLEDGE');
+    },
+
+    // Start Ritual / Coin Toss
+    startDivination() {
+        this.processRequest('DIVINATION');
     },
 
     onShareAppMessage() {
