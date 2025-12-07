@@ -2,7 +2,11 @@
   <!-- Background Decor: Ink Mountains -->
   <view class="bg-landscape"></view>
 
-  <view class="title" bindlongpress="onTitleLongPress" style="color: {{titleColor}}">{{titleText}}</view>
+  <view class="title" bindlongpress="onTitleLongPress" bindtap="onTitleTap">
+    <text style="color: {{titleColor}}">{{titlePrefix}}</text>
+    <text style="color: {{specialCharColor}}">{{titleSpecial}}</text>
+    <text style="color: {{titleColor}}">{{titleSuffix}}</text>
+  </view>
   
   <view class="instructions">
     <view class="instruction-title">决策指南：</view>
@@ -29,8 +33,8 @@
 
       <!-- Right: Direct Ask Button -->
       <view class="direct-ask-btn" bindtap="directAsk">
-          <text class="magic-icon">💡</text>
-          <text>智能分析</text>
+          <text class="magic-icon">{{aiButtonIcon}}</text>
+          <text>{{aiButtonText}}</text>
       </view>
     </view>
   </view>
