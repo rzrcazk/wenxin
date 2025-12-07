@@ -1,4 +1,10 @@
 <view class="container">
+  <!-- Preload Images: Hidden but triggers download -->
+  <view style="width:0;height:0;overflow:hidden;">
+      <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png"></image>
+      <image src="https://image.952712.xyz/file/1765097321758_fanmian.png"></image>
+  </view>
+
   <view class="header">{{tossCount >= 6 ? '步骤完成' : '第 ' + (tossCount + 1) + ' 次步骤'}}</view>
   
   <view class="result-area">
