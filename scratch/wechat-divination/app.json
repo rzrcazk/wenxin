@@ -4,7 +4,9 @@
     "pages/divination/divination",
     "pages/result/result",
     "pages/divination_god/divination_god",
-    "pages/result_god/result_god"
+    "pages/result_god/result_god",
+    "pages/divination_super/divination_super",
+    "pages/result_super/result_super"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -13,5 +15,6 @@
     "navigationBarTextStyle": "white"
   },
   "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json"
 }

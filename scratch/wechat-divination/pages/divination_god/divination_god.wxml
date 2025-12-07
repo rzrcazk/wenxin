@@ -40,9 +40,9 @@
         {{isTossing ? '硬币旋转中...' : '抛掷硬币'}}
       </button>
       <view class="toss-animation-container" wx:if="{{isTossing}}">
-         <image src="/images/zhengmian.png" class="toss-coin coin-1 {{animationClass}}"></image>
-         <image src="/images/fanmian.png" class="toss-coin coin-2 {{animationClass}}"></image>
-         <image src="/images/zhengmian.png" class="toss-coin coin-3 {{animationClass}}"></image>
+         <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="toss-coin coin-1 {{animationClass}}"></image>
+         <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="toss-coin coin-2 {{animationClass}}"></image>
+         <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="toss-coin coin-3 {{animationClass}}"></image>
       </view>
     </view>
 
@@ -51,9 +51,9 @@
       <!-- 3 Yang (Old Yang 9) -->
       <view class="coin-option {{selectedType === 9 ? 'selected' : ''}}" bindtap="selectResult" data-type="9">
         <view class="coins-visual">
-          <image src="/images/zhengmian.png" class="coin-img yang"></image>
-          <image src="/images/zhengmian.png" class="coin-img yang"></image>
-          <image src="/images/zhengmian.png" class="coin-img yang"></image>
+          <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="coin-img yang"></image>
+          <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="coin-img yang"></image>
+          <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="coin-img yang"></image>
         </view>
         <text class="option-label">三个正面 (老阳 九)</text>
       </view>
@@ -61,9 +61,9 @@
       <!-- 3 Yin (Old Yin 6) -->
       <view class="coin-option {{selectedType === 6 ? 'selected' : ''}}" bindtap="selectResult" data-type="6">
         <view class="coins-visual">
-          <image src="/images/fanmian.png" class="coin-img yin"></image>
-          <image src="/images/fanmian.png" class="coin-img yin"></image>
-          <image src="/images/fanmian.png" class="coin-img yin"></image>
+          <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="coin-img yin"></image>
+          <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="coin-img yin"></image>
+          <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="coin-img yin"></image>
         </view>
         <text class="option-label">三个反面 (老阴 六)</text>
       </view>
@@ -71,9 +71,9 @@
       <!-- 1 Yang 2 Yin (Young Yang 7) -->
       <view class="coin-option {{selectedType === 7 ? 'selected' : ''}}" bindtap="selectResult" data-type="7">
         <view class="coins-visual">
-          <image src="/images/zhengmian.png" class="coin-img yang"></image>
-          <image src="/images/fanmian.png" class="coin-img yin"></image>
-          <image src="/images/fanmian.png" class="coin-img yin"></image>
+          <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="coin-img yang"></image>
+          <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="coin-img yin"></image>
+          <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="coin-img yin"></image>
         </view>
         <text class="option-label">一正二反 (少阳 七)</text>
       </view>
@@ -81,9 +81,9 @@
       <!-- 2 Yang 1 Yin (Young Yin 8) -->
       <view class="coin-option {{selectedType === 8 ? 'selected' : ''}}" bindtap="selectResult" data-type="8">
         <view class="coins-visual">
-          <image src="/images/zhengmian.png" class="coin-img yang"></image>
-          <image src="/images/zhengmian.png" class="coin-img yang"></image>
-          <image src="/images/fanmian.png" class="coin-img yin"></image>
+          <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="coin-img yang"></image>
+          <image src="https://image.952712.xyz/file/1765097341280_zhengmian.png" class="coin-img yang"></image>
+          <image src="https://image.952712.xyz/file/1765097321758_fanmian.png" class="coin-img yin"></image>
         </view>
         <text class="option-label">二正一反 (少阴 八)</text>
       </view>

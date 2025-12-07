@@ -1,5 +1,4 @@
-const API_URL = 'https://new-api.952712.xyz:8443/v1/chat/completions';
-const API_KEY = 'sk-dSjpLlCEKZEVww9pSPbFXA6zgxERr2djxDsJlqV9z0C0xb0G';
+const { API_URL, API_KEY } = require('./config.js');
 
 const MODELS = {
     NORMAL: '流式抗截断/gemini-2.5-flash-nothinking', // 简单问题
